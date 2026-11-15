@@ -60,7 +60,7 @@ const state = {
     currentYear: today.year,
     selectedDay: today.day,
     selectedTime: null,
-    slots: SLOTS_ODD_DAY
+    slots: today.day % 2 === 0 ? SLOTS_EVEN_DAY : SLOTS_ODD_DAY
 };
 
 // ============================================================
