@@ -1,14 +1,132 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Выбор даты и времени</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ХТОНЬ — Выбор даты и времени</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
     <div class="page">
-      <!-- Перенесите вашу верстку. Удалите статичные данные. Подключите скрипт -->
+
+        <!-- Шапка сайта -->
+        <header class="header">
+            <a class="logo" href="#">
+                <span class="logo-name">ХТОНЬ</span>
+                <span class="logo-caption">BARBER • BOTANICAL RITUALS</span>
+            </a>
+
+            <nav class="navigation">
+                <a href="#">УСЛУГИ</a>
+                <a href="#">МАСТЕРА</a>
+                <a href="#">АТМОСФЕРА</a>
+                <a href="#">КОНТАКТЫ</a>
+            </nav>
+
+            <a class="header-button" href="#">ЗАПИСАТЬСЯ</a>
+        </header>
+
+        <main>
+            <!-- Заголовок страницы -->
+            <section class="intro">
+                <p class="overline">ЗАПИСЬ / ШАГ 3</p>
+                <h1>Найди своё время</h1>
+                <p>Выбери удобный день и свободный слот.</p>
+            </section>
+
+            <!-- Выбор даты и времени -->
+            <section class="booking">
+                <ol class="steps">
+                    <li class="step done">
+                        <span class="step-number">1</span>
+                        <span>МАСТЕР</span>
+                    </li>
+                    <li class="step-line"></li>
+                    <li class="step done">
+                        <span class="step-number">2</span>
+                        <span>УСЛУГА</span>
+                    </li>
+                    <li class="step-line"></li>
+                    <li class="step current">
+                        <span class="step-number">3</span>
+                        <span>ВРЕМЯ</span>
+                    </li>
+                    <li class="step-line"></li>
+                    <li class="step">
+                        <span class="step-number">4</span>
+                        <span>КОНТАКТЫ</span>
+                    </li>
+                    <li class="step-line"></li>
+                    <li class="step">
+                        <span class="step-number">5</span>
+                        <span>ГОТОВО</span>
+                    </li>
+                </ol>
+
+                <div class="booking-content">
+
+                    <!-- Календарь -->
+                    <section class="calendar">
+                        <div class="calendar-header">
+                            <h2 class="month-year">НОЯБРЬ 2026</h2>
+                            <div class="month-buttons">
+                                <button class="month-prev" type="button" aria-label="Предыдущий месяц">‹</button>
+                                <button class="month-next" type="button" aria-label="Следующий месяц">›</button>
+                            </div>
+                        </div>
+
+                        <div class="weekdays">
+                            <span>ПН</span>
+                            <span>ВТ</span>
+                            <span>СР</span>
+                            <span>ЧТ</span>
+                            <span>ПТ</span>
+                            <span>СБ</span>
+                            <span>ВС</span>
+                        </div>
+
+                        <div class="days" aria-label="Дни месяца"></div>
+
+                        <p class="calendar-note">Выбранная дата отмечена цветом.</p>
+                    </section>
+
+                    <!-- Доступное время -->
+                    <section class="time">
+                        <h2 class="time-date">ВЫБЕРИТЕ ДАТУ</h2>
+                        <p class="time-description">Доступное время</p>
+
+                        <div class="time-slots" aria-label="Доступное время"></div>
+
+                        <div class="time-bottom">
+                            <p>ВЫБРАНО: <strong class="selected-value">ВЫБЕРИТЕ ВРЕМЯ</strong></p>
+                            <a class="continue-button" href="#">ПРОДОЛЖИТЬ</a>
+                            <a class="alternative" href="#">НЕТ ВРЕМЕНИ? ПОСМОТРИ АЛЬТЕРНАТИВУ →</a>
+                        </div>
+                    </section>
+                </div>
+
+                <a class="back-link" href="#">← НАЗАД</a>
+            </section>
+        </main>
+
+        <!-- Подвал сайта -->
+        <footer class="footer">
+            <div class="footer-brand">
+                <span class="footer-logo">ХТОНЬ</span>
+                <p>Лесная тишина. Живой стиль.</p>
+            </div>
+
+            <p>МЫ ЗДЕСЬ · ул. Лесная, 18 · Москва</p>
+            <p>ЕЖЕДНЕВНО · 10:00–22:00</p>
+        </footer>
+
     </div>
-  </body>
+
+    <script src="script.js"></script>
+</body>
 </html>
