@@ -4,27 +4,28 @@ import TimeSlots from "./components/TimeSlots";
 import BookingBottomBar from "./components/BookingBottomBar";
 import { MONTHS, MONTHS_GENITIVE, DAYS_OF_WEEK, compareDates } from "./data/date";
 
-// Учебные данные слотов. В реальном проекте они приходили бы с сервера.
-const SLOTS_ODD_DAY = [
-    { time: "10:00", available: true },
-    { time: "11:30", available: true },
-    { time: "13:00", available: true },
-    { time: "14:30", available: true },
-    { time: "16:00", available: false },
-    { time: "18:30", available: true }
+// Время, которое может быть доступно для записи.
+const ALL_TIMES = [
+    "10:00", "11:30", "13:00",
+    "14:30", "16:00", "18:30"
 ];
 
-const SLOTS_EVEN_DAY = [
-    { time: "10:00", available: true },
-    { time: "11:30", available: false },
-    { time: "13:00", available: true },
-    { time: "14:30", available: true },
-    { time: "16:00", available: true },
-    { time: "18:30", available: true }
-];
+// Для каждой даты формируется свой набор свободных и занятых слотов.
+// Это демонстрационные данные: в настоящем проекте их отдавал бы сервер.
+function getSlotsForDay(day, month, year) {
+    const date = new Date(year, month, day);
+    const dayOfYear = Math.floor(
+        (date - new Date(year, 0, 0)) / (24 * 60 * 60 * 1000)
+    );
 
-function getSlotsForDay(day) {
-    return day % 2 === 0 ? SLOTS_EVEN_DAY : SLOTS_ODD_DAY;
+    const availabilityMask = ((dayOfYear * 37 + year) % 62) + 1;
+
+    return ALL_TIMES.map(function (time, index) {
+        return {
+            time: time,
+            available: Boolean(availabilityMask & (1 << index))
+        };
+    });
 }
 
 function App() {
@@ -41,13 +42,13 @@ function App() {
     const [currentYear, setCurrentYear] = useState(today.year);
     const [selectedDay, setSelectedDay] = useState(today.day);
     const [selectedTime, setSelectedTime] = useState(null);
-    const [slots, setSlots] = useState(getSlotsForDay(today.day));
+    const [slots, setSlots] = useState(getSlotsForDay(today.day, today.month, today.year));
 
     // При выборе другого дня время сбрасывается.
     function handleDayClick(day) {
         setSelectedDay(day);
         setSelectedTime(null);
-        setSlots(getSlotsForDay(day));
+        setSlots(getSlotsForDay(day, currentMonth, currentYear));
     }
 
     function handleTimeClick(time) {
@@ -75,13 +76,13 @@ function App() {
 
         if (newYear === today.year && newMonth === today.month) {
             setSelectedDay(today.day);
-            setSlots(getSlotsForDay(today.day));
+            setSlots(getSlotsForDay(today.day, today.month, today.year));
         } else if (compareDates(
             { day: 1, month: newMonth, year: newYear },
             today
         ) >= 0) {
             setSelectedDay(1);
-            setSlots(getSlotsForDay(1));
+            setSlots(getSlotsForDay(1, newMonth, newYear));
         } else {
             setSelectedDay(null);
             setSlots([]);
