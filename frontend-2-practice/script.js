@@ -30,25 +30,31 @@ const today = {
     year: now.getFullYear()
 };
 
-// Слоты меняются в зависимости от выбранного дня.
-// Это учебные данные, настоящего сервера пока нет.
-const SLOTS_ODD_DAY = [
-    { time: "10:00", available: true },
-    { time: "11:30", available: true },
-    { time: "13:00", available: true },
-    { time: "14:30", available: true },
-    { time: "16:00", available: false },
-    { time: "18:30", available: true }
+// Время, которое может быть доступно для записи.
+const ALL_TIMES = [
+    "10:00", "11:30", "13:00",
+    "14:30", "16:00", "18:30"
 ];
 
-const SLOTS_EVEN_DAY = [
-    { time: "10:00", available: true },
-    { time: "11:30", available: false },
-    { time: "13:00", available: true },
-    { time: "14:30", available: true },
-    { time: "16:00", available: true },
-    { time: "18:30", available: true }
-];
+// Для каждой даты формируется свой набор свободных и занятых слотов.
+// Это демонстрационные данные: в настоящем проекте их отдавал бы сервер.
+function getSlotsForDay(day, month, year) {
+    const date = new Date(year, month, day);
+    const dayOfYear = Math.floor(
+        (date - new Date(year, 0, 0)) / (24 * 60 * 60 * 1000)
+    );
+
+    // Получаем маску от 1 до 62, чтобы у даты был
+    // хотя бы один свободный и один занятый слот.
+    const availabilityMask = ((dayOfYear * 37 + year) % 62) + 1;
+
+    return ALL_TIMES.map(function (time, index) {
+        return {
+            time: time,
+            available: Boolean(availabilityMask & (1 << index))
+        };
+    });
+}
 
 // ============================================================
 // 2. СОСТОЯНИЕ
@@ -60,7 +66,7 @@ const state = {
     currentYear: today.year,
     selectedDay: today.day,
     selectedTime: null,
-    slots: today.day % 2 === 0 ? SLOTS_EVEN_DAY : SLOTS_ODD_DAY
+    slots: getSlotsForDay(today.day, today.month, today.year)
 };
 
 // ============================================================
@@ -279,7 +285,7 @@ function onDayClick(event) {
 
     state.selectedDay = day;
     state.selectedTime = null;
-    state.slots = getSlotsForDay(day);
+    state.slots = getSlotsForDay(day, state.currentMonth, state.currentYear);
 
     renderCalendar();
     renderTimeSlots();
@@ -326,7 +332,7 @@ function changeMonth(step) {
 
     state.slots = state.selectedDay === null
         ? []
-        : getSlotsForDay(state.selectedDay);
+        : getSlotsForDay(state.selectedDay, state.currentMonth, state.currentYear);
 
     renderCalendar();
     renderTimeSlots();
