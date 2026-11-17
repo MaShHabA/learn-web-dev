@@ -18,7 +18,12 @@ function getSlotsForDay(day, month, year) {
         (date - new Date(year, 0, 0)) / (24 * 60 * 60 * 1000)
     );
 
-    const availabilityMask = ((dayOfYear * 37 + year) % 62) + 1;
+    let availabilityMask = ((dayOfYear * 37 + year) % 62) + 1;
+
+    // Оставляем минимум два свободных времени.
+    if ((availabilityMask & (availabilityMask - 1)) === 0) {
+        availabilityMask |= availabilityMask & 1 ? 2 : 1;
+    }
 
     return ALL_TIMES.map(function (time, index) {
         return {
