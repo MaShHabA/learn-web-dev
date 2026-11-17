@@ -46,7 +46,12 @@ function getSlotsForDay(day, month, year) {
 
     // Получаем маску от 1 до 62, чтобы у даты был
     // хотя бы один свободный и один занятый слот.
-    const availabilityMask = ((dayOfYear * 37 + year) % 62) + 1;
+    let availabilityMask = ((dayOfYear * 37 + year) % 62) + 1;
+
+    // Оставляем минимум два свободных времени.
+    if ((availabilityMask & (availabilityMask - 1)) === 0) {
+        availabilityMask |= availabilityMask & 1 ? 2 : 1;
+    }
 
     return ALL_TIMES.map(function (time, index) {
         return {
