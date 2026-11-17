@@ -1,51 +1,41 @@
-// ============================================================
-// 1. ДАННЫЕ
-// ============================================================
-
-// Названия месяцев для заголовка календаря.
+// ДАННЫЕ
 const MONTHS = [
     "ЯНВАРЬ", "ФЕВРАЛЬ", "МАРТ", "АПРЕЛЬ",
     "МАЙ", "ИЮНЬ", "ИЮЛЬ", "АВГУСТ",
     "СЕНТЯБРЬ", "ОКТЯБРЬ", "НОЯБРЬ", "ДЕКАБРЬ"
 ];
 
-// Названия месяцев для нижней панели.
 const MONTHS_GENITIVE = [
     "января", "февраля", "марта", "апреля",
     "мая", "июня", "июля", "августа",
     "сентября", "октября", "ноября", "декабря"
 ];
-
-// Дни недели в порядке, который использует getDay().
 const DAYS_OF_WEEK = [
     "Воскресенье", "Понедельник", "Вторник", "Среда",
     "Четверг", "Пятница", "Суббота"
 ];
 
-// Сегодня берём из компьютера пользователя.
 const now = new Date();
+
 const today = {
     day: now.getDate(),
     month: now.getMonth(),
     year: now.getFullYear()
 };
 
-// Время, которое может быть доступно для записи.
 const ALL_TIMES = [
     "10:00", "11:30", "13:00",
     "14:30", "16:00", "18:30"
 ];
 
-// Для каждой даты формируется свой набор свободных и занятых слотов.
-// Это демонстрационные данные: в настоящем проекте их отдавал бы сервер.
 function getSlotsForDay(day, month, year) {
     const date = new Date(year, month, day);
+
     const dayOfYear = Math.floor(
         (date - new Date(year, 0, 0)) / (24 * 60 * 60 * 1000)
     );
 
-    // Получаем маску от 1 до 62, чтобы у даты был
-    // хотя бы один свободный и один занятый слот.
+    // Получаем маску от 1 до 62.
     let availabilityMask = ((dayOfYear * 37 + year) % 62) + 1;
 
     // Оставляем минимум два свободных времени.
@@ -61,11 +51,8 @@ function getSlotsForDay(day, month, year) {
     });
 }
 
-// ============================================================
-// 2. СОСТОЯНИЕ
-// ============================================================
+// СОСТОЯНИЕ
 
-// При открытии страницы сразу выбираем сегодняшний день.
 const state = {
     currentMonth: today.month,
     currentYear: today.year,
@@ -74,12 +61,7 @@ const state = {
     slots: getSlotsForDay(today.day, today.month, today.year)
 };
 
-// ============================================================
-// 3. ЧИСТЫЕ ФУНКЦИИ
-// ============================================================
 
-// Строит календарь из недель по семь дней.
-// month начинается с нуля: 0 — январь, 11 — декабрь.
 function buildCalendarGrid(year, month) {
     const firstDay = new Date(year, month, 1);
     const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -110,6 +92,7 @@ function buildCalendarGrid(year, month) {
             day: nextDay,
             otherMonth: true
         });
+
         nextDay++;
     }
 
@@ -121,8 +104,6 @@ function buildCalendarGrid(year, month) {
 
     return weeks;
 }
-
-// Сравнивает две даты: -1 — первая раньше, 0 — равны, 1 — позже.
 function compareDates(date1, date2) {
     const first = new Date(date1.year, date1.month, date1.day);
     const second = new Date(date2.year, date2.month, date2.day);
@@ -141,18 +122,21 @@ function isDateSelectable(day, month, year) {
     ) >= 0;
 }
 
-// ============================================================
-// 4. ОТРИСОВКА И ОБРАБОТЧИКИ
-// ============================================================
+// ОТРИСОВКА И ОБРАБОТЧИКИ
 
 // Рисует календарь на текущий месяц.
 function renderCalendar() {
     const monthTitle = document.querySelector(".month-year");
     const daysContainer = document.querySelector(".days");
 
-    monthTitle.textContent = MONTHS[state.currentMonth] + " " + state.currentYear;
+    monthTitle.textContent =
+        MONTHS[state.currentMonth] + " " + state.currentYear;
 
-    const weeks = buildCalendarGrid(state.currentYear, state.currentMonth);
+    const weeks = buildCalendarGrid(
+        state.currentYear,
+        state.currentMonth
+    );
+
     let html = "";
 
     weeks.forEach(function (week) {
@@ -170,9 +154,11 @@ function renderCalendar() {
 
             let classes = "";
 
-            if (cell.day === today.day &&
+            if (
+                cell.day === today.day &&
                 state.currentMonth === today.month &&
-                state.currentYear === today.year) {
+                state.currentYear === today.year
+            ) {
                 classes += " today";
             }
 
@@ -190,9 +176,10 @@ function renderCalendar() {
 
     daysContainer.innerHTML = html;
 
-    // После innerHTML старые кнопки удалены, поэтому обработчики
-    // нужно повесить на новые кнопки.
-    const dayButtons = daysContainer.querySelectorAll("button:not(:disabled)");
+    // После перерисовки добавляем обработчики на новые кнопки.
+    const dayButtons = daysContainer.querySelectorAll(
+        "button:not(:disabled)"
+    );
 
     dayButtons.forEach(function (button) {
         button.addEventListener("click", onDayClick);
@@ -244,7 +231,9 @@ function renderTimeSlots() {
     slotsContainer.innerHTML = html;
 
     // Обработчики добавляются заново после перерисовки.
-    const slotButtons = slotsContainer.querySelectorAll("button:not(:disabled)");
+    const slotButtons = slotsContainer.querySelectorAll(
+        "button:not(:disabled)"
+    );
 
     slotButtons.forEach(function (button) {
         button.addEventListener("click", onTimeSlotClick);
@@ -285,7 +274,12 @@ function onDayClick(event) {
 
     state.selectedDay = day;
     state.selectedTime = null;
-    state.slots = getSlotsForDay(day, state.currentMonth, state.currentYear);
+
+    state.slots = getSlotsForDay(
+        day,
+        state.currentMonth,
+        state.currentYear
+    );
 
     renderCalendar();
     renderTimeSlots();
@@ -316,15 +310,21 @@ function changeMonth(step) {
 
     state.selectedTime = null;
 
-    // В текущем месяце оставляем сегодня выбранным.
-    // В будущем месяце выбираем первое доступное число.
-    if (state.currentYear === today.year &&
-        state.currentMonth === today.month) {
+    if (
+        state.currentYear === today.year &&
+        state.currentMonth === today.month
+    ) {
         state.selectedDay = today.day;
-    } else if (compareDates(
-        { day: 1, month: state.currentMonth, year: state.currentYear },
-        today
-    ) >= 0) {
+    } else if (
+        compareDates(
+            {
+                day: 1,
+                month: state.currentMonth,
+                year: state.currentYear
+            },
+            today
+        ) >= 0
+    ) {
         state.selectedDay = 1;
     } else {
         state.selectedDay = null;
@@ -332,25 +332,33 @@ function changeMonth(step) {
 
     state.slots = state.selectedDay === null
         ? []
-        : getSlotsForDay(state.selectedDay, state.currentMonth, state.currentYear);
+        : getSlotsForDay(
+            state.selectedDay,
+            state.currentMonth,
+            state.currentYear
+        );
 
     renderCalendar();
     renderTimeSlots();
     updateBottomBar();
 }
 
-// ============================================================
-// 5. ИНИЦИАЛИЗАЦИЯ
-// ============================================================
+// ИНИЦИАЛИЗАЦИЯ
 
 function init() {
-    document.querySelector(".month-prev").addEventListener("click", function () {
-        changeMonth(-1);
-    });
+    document.querySelector(".month-prev").addEventListener(
+        "click",
+        function () {
+            changeMonth(-1);
+        }
+    );
 
-    document.querySelector(".month-next").addEventListener("click", function () {
-        changeMonth(1);
-    });
+    document.querySelector(".month-next").addEventListener(
+        "click",
+        function () {
+            changeMonth(1);
+        }
+    );
 
     renderCalendar();
     renderTimeSlots();
