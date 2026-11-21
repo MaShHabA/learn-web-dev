@@ -1,3 +1,4 @@
+
 /* Сброс и основные стили */
 * {
     box-sizing: border-box;
@@ -148,6 +149,16 @@ button {
     font-weight: 700;
 }
 
+.step:not(:last-child)::after {
+    content: "";
+    display: block;
+    flex-shrink: 0;
+    width: 45px;
+    height: 2px;
+    margin: 0 8px;
+    background: #c2ccaa;
+}
+
 .step-number {
     width: 30px;
     height: 30px;
@@ -164,17 +175,6 @@ button {
     border-color: #d1db7a;
     color: #0b1912;
     background: #d1db7a;
-}
-
-.step-line {
-    width: 45px;
-    height: 2px;
-    margin: 0 8px;
-    background: #c2ccaa;
-}
-
-.step.done + .step-line {
-    background: #73854a;
 }
 
 /* Календарь и список времени */
@@ -399,7 +399,6 @@ button {
     font-weight: 700;
 }
 
-
 /* Состояния календаря и временных слотов */
 .days button.disabled {
     color: #b8bbae;
@@ -442,7 +441,6 @@ button {
     line-height: 1.5;
 }
 
-
 /* Адаптация страницы для небольших экранов */
 @media (max-width: 900px) {
     .header {
@@ -473,9 +471,7 @@ button {
         row-gap: 14px;
     }
 
-    .step-line {
-        width: 20px;
-    }
+  
 }
 
 @media (max-width: 520px) {
@@ -514,4 +510,16 @@ button {
     .continue-button {
         align-self: stretch;
     }
+}
+
+/* Фокус при управлении клавиатурой */
+a:focus-visible,
+button:focus-visible {
+    outline: 2px solid #73854a;
+    outline-offset: 4px;
+}
+
+.header a:focus-visible,
+.footer a:focus-visible {
+    outline-color: #d1db7a;
 }

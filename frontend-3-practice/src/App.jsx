@@ -3,15 +3,11 @@ import CalendarGrid from "./components/CalendarGrid";
 import TimeSlots from "./components/TimeSlots";
 import BookingBottomBar from "./components/BookingBottomBar";
 import { MONTHS, MONTHS_GENITIVE, DAYS_OF_WEEK, compareDates } from "./data/date";
-
-// Время, которое может быть доступно для записи.
 const ALL_TIMES = [
     "10:00", "11:30", "13:00",
     "14:30", "16:00", "18:30"
 ];
 
-// Для каждой даты формируется свой набор свободных и занятых слотов.
-// Это демонстрационные данные: в настоящем проекте их отдавал бы сервер.
 function getSlotsForDay(day, month, year) {
     const date = new Date(year, month, day);
     const dayOfYear = Math.floor(
@@ -20,7 +16,6 @@ function getSlotsForDay(day, month, year) {
 
     let availabilityMask = ((dayOfYear * 37 + year) % 62) + 1;
 
-    // Оставляем минимум два свободных времени.
     if ((availabilityMask & (availabilityMask - 1)) === 0) {
         availabilityMask |= availabilityMask & 1 ? 2 : 1;
     }
@@ -42,14 +37,12 @@ function App() {
         year: now.getFullYear()
     };
 
-    // Состояние страницы.
     const [currentMonth, setCurrentMonth] = useState(today.month);
     const [currentYear, setCurrentYear] = useState(today.year);
     const [selectedDay, setSelectedDay] = useState(today.day);
     const [selectedTime, setSelectedTime] = useState(null);
     const [slots, setSlots] = useState(getSlotsForDay(today.day, today.month, today.year));
 
-    // При выборе другого дня время сбрасывается.
     function handleDayClick(day) {
         setSelectedDay(day);
         setSelectedTime(null);
@@ -60,7 +53,6 @@ function App() {
         setSelectedTime(time);
     }
 
-    // Переключение месяца и года.
     function changeMonth(step) {
         let newMonth = currentMonth + step;
         let newYear = currentYear;
@@ -103,7 +95,6 @@ function App() {
 
     return (
         <div className="page">
-            {/* Шапка сайта */}
             <header className="header">
                 <a className="logo" href="#">
                     <span className="logo-name">ХТОНЬ</span>
@@ -121,44 +112,36 @@ function App() {
             </header>
 
             <main>
-                {/* Заголовок страницы */}
                 <section className="intro">
                     <p className="overline">ЗАПИСЬ / ШАГ 3</p>
                     <h1>Найди своё время</h1>
                     <p>Выбери удобный день и свободный слот.</p>
                 </section>
 
-                {/* Выбор даты и времени */}
-                <section className="booking">
-                    <ol className="steps">
-                        <li className="step done">
-                            <span className="step-number">1</span>
-                            <span>МАСТЕР</span>
-                        </li>
-                        <li className="step-line"></li>
-                        <li className="step done">
-                            <span className="step-number">2</span>
-                            <span>УСЛУГА</span>
-                        </li>
-                        <li className="step-line"></li>
-                        <li className="step current">
-                            <span className="step-number">3</span>
-                            <span>ВРЕМЯ</span>
-                        </li>
-                        <li className="step-line"></li>
-                        <li className="step">
-                            <span className="step-number">4</span>
-                            <span>КОНТАКТЫ</span>
-                        </li>
-                        <li className="step-line"></li>
-                        <li className="step">
-                            <span className="step-number">5</span>
-                            <span>ГОТОВО</span>
-                        </li>
-                    </ol>
-
+<section className="booking">
+    <ol className="steps">
+        <li className="step done">
+            <span className="step-number">1</span>
+            <span>МАСТЕР</span>
+        </li>
+        <li className="step done">
+            <span className="step-number">2</span>
+            <span>УСЛУГА</span>
+        </li>
+        <li className="step current">
+            <span className="step-number">3</span>
+            <span>ВРЕМЯ</span>
+        </li>
+        <li className="step">
+            <span className="step-number">4</span>
+            <span>КОНТАКТЫ</span>
+        </li>
+        <li className="step">
+            <span className="step-number">5</span>
+            <span>ГОТОВО</span>
+        </li>
+    </ol>
                     <div className="booking-content">
-                        {/* Календарь */}
                         <section className="calendar">
                             <div className="calendar-header">
                                 <h2 className="month-year">
@@ -208,7 +191,6 @@ function App() {
                             </p>
                         </section>
 
-                        {/* Доступное время */}
                         <section className="time">
                             <h2 className="time-date">{dateTitle}</h2>
                             <p className="time-description">Доступное время</p>
@@ -232,7 +214,6 @@ function App() {
                 </section>
             </main>
 
-            {/* Подвал сайта */}
             <footer className="footer">
                 <div className="footer-brand">
                     <span className="footer-logo">ХТОНЬ</span>
